@@ -23,6 +23,22 @@ public_members_list = []
 for public_member in public_members:
 	public_members_list.append(public_member)
 
+repos = org.get_repos()
+repos_lsit=[]
+
+print('\n\nRepos of the Organization')
+for repo in repos:
+    repos_lsit.append(repo)
+    print(repo.name)
+    
+
+for r in org.get_repos():
+    
+    if r.name == 'leute':
+        print('\n\nPrinting Commits for Leute Repository\n')
+        for c in r.get_commits():
+            print(c.commit.author.date,'\t\t',c.commit.author.name,'\t\t',c.commit.author.email)
+
 
 print('\n\nTeam Members for the Organization')
 teams = org.get_teams()
