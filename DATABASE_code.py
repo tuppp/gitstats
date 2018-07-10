@@ -7,10 +7,7 @@ from sqlalchemy.orm import sessionmaker
 #import mysql.connector as conn
 
 
-
-
 '''function to make calls to database'''
-
 
 def getPostcodeFromTable(postcode, table, s):
     result = []
@@ -30,13 +27,11 @@ def get_measure_date(m_date,table,s):
         result.append(a)
     return np.array(result)
 
-
 def   get_precipitation_type(p_type, table, s):
     result = []
     for a in s.query(Weather_data).filter(Weather_data.  precipitation_type== p_type):
         result.append(a)
     return np.array(result)
-
 
 def  get_precipitation_amount(p_a, table, s):
     result = []
@@ -67,7 +62,6 @@ def get_min_temp(m_t,table,s):
     for a in s.query(Weather_data).filter(Weather_data.min_temp == m_t):
         result.append(a)
     return np.array(result)
-
 
 def get_sun_hours(s_h,table,s):
     result = []
@@ -102,7 +96,6 @@ class Weather_data(Base):
     max_temp = Column(Float)
     min_temp = Column(Float)
     ground_min_temp = Column(Float)
-
 
 if __name__ == "__main__":
 
@@ -149,5 +142,4 @@ if __name__ == "__main__":
         s.rollback()
     finally:
         s.close()
-
-
+        
