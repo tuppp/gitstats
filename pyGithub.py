@@ -1,4 +1,11 @@
 from github import Github
+import numpy as np
+
+authors = []
+total = []
+addition = []
+deletion = []
+comm = []
 
 g1 = Github("luszuba","-0l6*#KP")
 
@@ -6,44 +13,62 @@ print('Organization Name')
 org = g1.get_organization('tuppp')
 print(org)
 
-issues = org.get_issues()
-for issue in issues:
-	print(issue)
-
-members = org.get_members()
-members_list = []
-for member in members:
-	members_list.append(member)
-
-has_in_members = org.has_in_members(members_list[0])
-print (has_in_members)
-
-public_members = org.get_public_members()
-public_members_list = []
-for public_member in public_members:
-	public_members_list.append(public_member)
-
-repos = org.get_repos()
-repos_lsit=[]
-
-print('\n\nRepos of the Organization')
-for repo in repos:
-    repos_lsit.append(repo)
-    print(repo.name)
-    
-
+i = 0
+count = 0
+perc = 0
 for r in org.get_repos():
+    print('\n\nAnalyzing Commits for '+r.name+' Repository\n')
+    commits = r.get_commits()
+    for x in commits:
+        count +=1
+    perc = 100/count
+    for c in commits:
+        author = c.commit.author.name
+        tot = c.stats.total
+        add = c.stats.additions
+        delt = c.stats.deletions
+        if author in authors:
+            ind = authors.index(author)
+            total[ind] += tot
+            addition[ind] += add
+            deletion[ind] += delt
+            comm[ind] += 1
+
+        else:
+            authors.append(author)
+            total.append(int(tot))
+            addition.append(int(add))
+            deletion.append(int(delt))
+            comm.append(1)
+
+        prc = float("%0.2f" % (perc*(i+1)))
+        print(prc,'% Done')
+        i += 1
+
+
+
+print('There were total: ',len(authors),' committers . . .')
+print('\nAvailable Commiters: ')
+for n in authors:
+    print(n)
+choice = input('\n\n 1. Enter name of the committer for whom you want to see the statistic\n 2. Print stats for all users')
+name = ''
+if choice == '1':
+    name = input("Enter name: ")
+
+for n in authors:
+    if n == name and choice == '1':
+        ind = authors.index(n)
+        print('\n\nLines of Code additions by ',n,' : ',addition[ind])
+        print('Lines of Code deletions by ',n,' : ',deletion[ind])
+        print('Total lines of Code contribution(add/del) by ',n,' : ',total[ind])
+        print('Total commits : ',comm[ind])
+
+    if choice == '2':
+        ind = authors.index(n)
+        print('\n\nLines of Code additions by ',n,' : ',addition[ind])
+        print('Lines of Code deletions by ',n,' : ',deletion[ind])
+        print('Total lines of Code contribution(add/del) by ',n,' : ',total[ind])
+        print('Total commits : ',comm[ind])
     
-    if r.name == 'leute':
-        print('\n\nPrinting Commits for Leute Repository\n')
-        for c in r.get_commits():
-            print(c.commit.author.date,'\t\t',c.commit.author.name,'\t\t',c.commit.author.email)
 
-
-print('\n\nTeam Members for the Organization')
-teams = org.get_teams()
-teams_list=[]
-for team in teams:
-    teams_list.append(team)
-    for member in team.get_members():
-        print(member.login)
