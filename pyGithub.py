@@ -17,6 +17,8 @@ i = 0
 count = 0
 perc = 0
 for r in org.get_repos():
+        if r.name == "leute":
+        continue
     print('\n\nAnalyzing Commits for '+r.name+' Repository\n')
     commits = r.get_commits()
     for x in commits:
